@@ -2,7 +2,7 @@
 <div style="width:500px;">  
     <div v-for="(value, index) in parent_val" :key="index">        
         <transition  enter-active-class="animated flipInY" >
-            <div :key="1" class="card" v-if="!parent_card_state[index].opened" v-on:click="ChildTouchCard(index)">
+            <div :key="1" class="card" v-if="!getCardsState[index].opened" v-on:click="ChildTouchCard(index)">
             </div>
             <div :key="2" class="card" v-else v-on:click="ChildTouchCard(index)">
                 <div class="card_suit" :class="RenderCardSuit(value)"></div>
@@ -14,10 +14,14 @@
 </div>
 </template>
 <script>
+import { mapGetters } from "vuex";
 export default {
   props: ["parent_val", "parent_card_state"],
   data() {
     return {};
+  },
+  computed: {
+    ...mapGetters(["getCardsState"])
   },
   methods: {
     RenderCardSuit(value) {
@@ -34,7 +38,7 @@ export default {
       return result;
     },
     ChildTouchCard(index) {
-      if (this.parent_card_state[index].clickable) {
+      if (this.getCardsState[index].clickable) {
         this.$emit("childtouch", index);
       }
     }

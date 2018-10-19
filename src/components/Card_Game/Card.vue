@@ -9,6 +9,10 @@
 </template>
 <script>
 import RenderCard from "./RenderCard";
+import { mapGetters } from "vuex";
+import { mapMutations } from "vuex";
+import { mapActions } from "vuex";
+
 export default {
   data() {
     return {
@@ -40,19 +44,27 @@ export default {
       pairs: []
     };
   },
+  actions: {
+    ...mapActions([""])
+  },
   methods: {
+    ...mapMutations(["makeCardState", "setCardState", "setCardsStateFalse"]),
     onChildaction(index) {
-      let state = this.card_state[index].opened;
+      let state = this.getCardsState[index].opened;
       let flipCard = index => {
-        state = this.card_state[index].opened;
+        state = this.getCardsState[index].opened;
+        let opened = "opened";
         //console.log(state);
         state = !state;
-        this.card_state[index].opened = state;
-        this.$set(this.card_state, index, this.card_state[index]);
+        this.$store.commit("setCardState", {
+          index: index,
+          value: state
+        });
+        //this.card_state[index].opened = state;
+        //this.$set(this.card_state, index, this.card_state[index]);
         return;
       };
       flipCard(index);
-      //console.log("step done");
       // add 2 elements to array to compare
       // and remove closed ones
       if (!this.pairs.includes(index)) {
@@ -76,8 +88,10 @@ export default {
           this.card_arr[ii][1] == this.card_arr[jj][1]
         ) {
           console.log("match");
-          this.card_state[ii].clickable = false;
-          this.card_state[jj].clickable = false;
+          //this.card_state[ii].clickable = false;
+          //this.card_state[jj].clickable = false;
+          this.$store.commit("setCardsStateFalse", ii);
+          this.$store.commit("setCardsStateFalse", jj);
           this.pairs = [];
         } else {
           console.log("no match" + ii + " | " + jj);
@@ -95,10 +109,10 @@ export default {
   },
   created() {
     let count = 0;
-    let amount = this.cards[0].amount;
-    let card_suit = this.cards[0].card_suit;
-    let card_suit_text = this.cards[1];
-    let card_suit_value = this.cards[2];
+    let amount = this.getCardBase.amount;
+    let card_suit = this.getCardBase.card_suit;
+    let card_suit_text = this.getCardSuit;
+    let card_suit_value = this.getCardsValues;
     let iter = 0;
     let number,
       suit_rand = 0;
@@ -111,7 +125,11 @@ export default {
             card_suit_text[suit_rand],
             card_suit_value[number]
           ]);
-          this.card_state.push({ opened: false, clickable: true });
+          //this.card_state.push({ opened: false, clickable: true });
+          this.$store.commit("makeCardState", {
+            opened: false,
+            clickable: true
+          });
         }
         count++;
       }
@@ -125,7 +143,14 @@ export default {
     }
     this.card_arr = shuffle(shuffle(this.card_arr));
   },
-  computed: {},
+  computed: {
+    ...mapGetters([
+      "getCardBase",
+      "getCardSuit",
+      "getCardsValues",
+      "getCardsState"
+    ])
+  },
   components: {
     RenderCard
   }
