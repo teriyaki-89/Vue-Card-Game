@@ -1,21 +1,21 @@
 <template>
    <!--<questions>
    </questions>-->
-   <form-val>
-     </form-val>
-     <!--<card>       
-     </card>-->
+   <!--<form-val>
+     </form-val>-->
+     <card>       
+     </card>
 </template>
 <script>
-//import Questions from "./Questions/Questions";
-import FormVal from "./FormValidation/FormValidation";
-//import Card from "./Card_Game/Card";
+//import Questions from "./components/Questions/Questions";
+//import FormVal from "./components/FormValidation/FormValidation";
+import Card from "./components/Card_Game/Card";
 export default {
   /*data() {},*/
   components: {
     //Questions,
-    FormVal
-    //Card
+    // FormVal
+    Card
   }
 };
 </script>
