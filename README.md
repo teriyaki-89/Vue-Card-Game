@@ -1,10 +1,10 @@
-# vue-l4
+# VueJs implementations throughout a web tutorial
 
 > A Vue.js project
 
 ## Build Setup
 
-``` bash
+```bash
 # install dependencies
 npm install
 
